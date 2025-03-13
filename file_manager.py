@@ -37,6 +37,8 @@ class FileManager:
                 
             items.sort(key=lambda x: (not x['is_directory'], x['name'].lower()))
             
+        except PermissionError:
+            pass
         except Exception as e:
             print(f"Error accessing {path}: {e}")
             
@@ -182,9 +184,10 @@ class FileManager:
                         6: "RAM Disk"
                     }
                     
+                    drive_name = drive.replace('\\', '')  # Remove backslash
                     drive_info = {
                         'path': drive,
-                        'name': f"Drive ({drive.strip('\\')}",
+                        'name': f"Drive ({drive_name})",
                         'type': drive_types.get(drive_type, "Unknown")
                     }
                     

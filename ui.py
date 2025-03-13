@@ -1,13 +1,13 @@
 import sys
 import os
-from PyQt6.QtWidgets import (
+from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-    QTreeView, QFileSystemModel, QPushButton, QLineEdit, QLabel,
+    QTreeView, QPushButton, QLineEdit, QLabel,
     QMenuBar, QMenu, QStatusBar, QFileDialog, QMessageBox,
-    QSplitter, QStyle, QToolBar, QComboBox
+    QSplitter, QStyle, QToolBar, QComboBox, QFileSystemModel
 )
-from PyQt6.QtCore import Qt, QDir, QSize
-from PyQt6.QtGui import QAction, QIcon
+from PySide6.QtCore import Qt, QDir, QSize
+from PySide6.QtGui import QAction, QIcon
 from file_manager import FileManager
 
 class FileManagerUI(QMainWindow):
@@ -42,7 +42,7 @@ class FileManagerUI(QMainWindow):
         address_layout.addWidget(self.path_combo)
         main_layout.addLayout(address_layout)
 
-        splitter = QSplitter(Qt.Orientation.Horizontal)
+        splitter = QSplitter(Qt.Horizontal)
 
         self.model = QFileSystemModel()
         self.model.setRootPath(QDir.rootPath())
@@ -62,7 +62,7 @@ class FileManagerUI(QMainWindow):
         self.details_view = QTreeView()
         self.details_view.setModel(self.model)
         self.details_view.setRootIndex(self.model.index(QDir.rootPath()))
-        self.details_view.setSelectionMode(QTreeView.SelectionMode.ExtendedSelection)
+        self.details_view.setSelectionMode(QTreeView.ExtendedSelection)
         self.details_view.setSortingEnabled(True)
         self.details_view.doubleClicked.connect(self.on_item_double_clicked)
 
@@ -250,10 +250,10 @@ class FileManagerUI(QMainWindow):
         reply = QMessageBox.question(
             self, "Confirm Delete",
             "Are you sure you want to delete the selected items?",
-            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+            QMessageBox.Yes | QMessageBox.No
         )
 
-        if reply == QMessageBox.StandardButton.Yes:
+        if reply == QMessageBox.Yes:
             paths = set()
             for index in selected:
                 if index.column() == 0:
@@ -291,7 +291,7 @@ class FileManagerUI(QMainWindow):
         msg = QMessageBox()
         msg.setWindowTitle("Properties")
         msg.setText("\n".join([f"{k}: {v}" for k, v in properties.items()]))
-        msg.exec()
+        msg.exec_()
 
     def copy_selected(self):
         # Implement copy functionality
@@ -309,4 +309,4 @@ def main():
     app = QApplication(sys.argv)
     window = FileManagerUI()
     window.show()
-    sys.exit(app.exec())
+    sys.exit(app.exec_())
